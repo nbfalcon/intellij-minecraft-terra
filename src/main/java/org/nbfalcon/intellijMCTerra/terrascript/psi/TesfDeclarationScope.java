@@ -11,8 +11,8 @@ import org.nbfalcon.intellijMCTerra.terrascript.psi.impl.TerrascriptSymbolTable;
 
 import java.util.*;
 
-public interface TerrascriptDeclarationScope extends PsiElement {
-    static @Nullable PsiElement resolveCanonical(TerrascriptDeclarationScope scope, String identifier) {
+public interface TesfDeclarationScope extends PsiElement {
+    static @Nullable PsiElement resolveCanonical(TesfDeclarationScope scope, String identifier) {
         while (scope != null) {
             final PsiElement resolvedTo = scope.getSymbolTable().resolveCanonical(identifier);
             if (resolvedTo != null) {
@@ -23,7 +23,7 @@ public interface TerrascriptDeclarationScope extends PsiElement {
         return null;
     }
 
-    static ResolveResult @NotNull [] resolveAll(TerrascriptDeclarationScope scope, String identifier,
+    static ResolveResult @NotNull [] resolveAll(TesfDeclarationScope scope, String identifier,
                                                 PsiElement context) {
         while (scope != null) {
             final Collection<PsiElement> resolvedTo = scope.getSymbolTable().resolveAll(identifier);
@@ -42,7 +42,7 @@ public interface TerrascriptDeclarationScope extends PsiElement {
         return ResolveResult.EMPTY_ARRAY;
     }
 
-    static LookupElement[] getCompletions(TerrascriptDeclarationScope scope) {
+    static LookupElement[] getCompletions(TesfDeclarationScope scope) {
         List<LookupElement> completions = new ArrayList<>();
         Set<String> shadowed = new HashSet<>();
         while (scope != null) {
@@ -54,7 +54,7 @@ public interface TerrascriptDeclarationScope extends PsiElement {
 
     @NotNull TerrascriptSymbolTable getSymbolTable();
 
-    default @Nullable TerrascriptDeclarationScope getParentScope() {
-        return PsiTreeUtil.getParentOfType(this, TerrascriptDeclarationScope.class, true);
+    default @Nullable TesfDeclarationScope getParentScope() {
+        return PsiTreeUtil.getParentOfType(this, TesfDeclarationScope.class, true);
     }
 }

@@ -3,14 +3,18 @@ package org.nbfalcon.intellijMCTerra.terrascript.psi.impl;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 import com.intellij.codeInsight.lookup.LookupElement;
+import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.icons.AllIcons;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.nbfalcon.intellijMCTerra.terrascript.psi.TesfVarDeclStmt;
+import org.nbfalcon.intellijMCTerra.terrascript.psi.util.TesfPsiUtil;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class TerrascriptSymbolTable {
@@ -38,16 +42,30 @@ public class TerrascriptSymbolTable {
     }
 
     public void addCompletions(List<LookupElement> target, Set<String> shadowed) {
-        for (String key : symbols.keys()) {
-            if (!shadowed.contains(key)) {
-                target.add(new LookupElement() {
-                    @Override
-                    public @NotNull String getLookupString() {
-                        return key;
+        for (Map.Entry<String, PsiElement> entry : symbols.entries()) {
+            String key = entry.getKey();
+            if (shadowed.add(key)) {
+                LookupElementBuilder item = LookupElementBuilder.create(key);
+                final TesfPsiUtil.VarType type = TesfPsiUtil.getType((TesfVarDeclStmt) entry.getValue());
+                if (type != null) {
+                    switch (type) {
+                        case BOOL:
+                            item = item.withIcon(AllIcons.Nodes.Interface);
+                            break;
+                        case NUM:
+                            item = item.withIcon(AllIcons.Nodes.Gvariable);
+                            break;
+                        case STR:
+                            item = item.withIcon(AllIcons.Nodes.Field);
+                            break;
                     }
-                });
-                shadowed.add(key);
+                }
+                target.add(item);
             }
         }
+    }
+
+    public Multimap<String, PsiElement> getSymbols() {
+        return symbols;
     }
 }

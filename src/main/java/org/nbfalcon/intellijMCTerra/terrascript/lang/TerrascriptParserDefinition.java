@@ -19,7 +19,7 @@ import org.nbfalcon.intellijMCTerra.terrascript._TerrascriptLexer;
 import org.nbfalcon.intellijMCTerra.terrascript.parser.TerrascriptElementTypes;
 import org.nbfalcon.intellijMCTerra.terrascript.parser.TerrascriptParser;
 import org.nbfalcon.intellijMCTerra.terrascript.psi.TerrascriptElementType;
-import org.nbfalcon.intellijMCTerra.terrascript.psi.impl.TerrascriptFileImpl;
+import org.nbfalcon.intellijMCTerra.terrascript.psi.impl.TesfFileImpl;
 
 public class TerrascriptParserDefinition implements ParserDefinition, LightEditCompatible {
     public static final IElementType LINE_COMMENT = new TerrascriptElementType("LINE_COMMENT");
@@ -93,6 +93,6 @@ public class TerrascriptParserDefinition implements ParserDefinition, LightEditC
 
     @Override
     public @NotNull PsiFile createFile(@NotNull FileViewProvider viewProvider) {
-        return new TerrascriptFileImpl(viewProvider);
+        return new TesfFileImpl(viewProvider);
     }
 }

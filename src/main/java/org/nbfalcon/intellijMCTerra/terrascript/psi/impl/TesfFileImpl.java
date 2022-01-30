@@ -7,13 +7,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.nbfalcon.intellijMCTerra.terrascript.lang.TerrascriptFileType;
 import org.nbfalcon.intellijMCTerra.terrascript.lang.TerrascriptLanguage;
-import org.nbfalcon.intellijMCTerra.terrascript.psi.TerrascriptDeclarationScope;
-import org.nbfalcon.intellijMCTerra.terrascript.psi.TerrascriptFile;
+import org.nbfalcon.intellijMCTerra.terrascript.psi.TesfDeclarationScope;
+import org.nbfalcon.intellijMCTerra.terrascript.psi.TesfFile;
 
-public class TerrascriptFileImpl extends PsiFileBase implements TerrascriptFile {
+public class TesfFileImpl extends PsiFileBase implements TesfFile {
     private TerrascriptSymbolTable lazySymbolTable = null;
 
-    public TerrascriptFileImpl(@NotNull FileViewProvider viewProvider) {
+    public TesfFileImpl(@NotNull FileViewProvider viewProvider) {
         super(viewProvider, TerrascriptLanguage.INSTANCE);
     }
 
@@ -40,7 +40,7 @@ public class TerrascriptFileImpl extends PsiFileBase implements TerrascriptFile 
     }
 
     @Override
-    public @Nullable TerrascriptDeclarationScope getParentScope() {
+    public @Nullable TesfDeclarationScope getParentScope() {
         return null;
     }
 }

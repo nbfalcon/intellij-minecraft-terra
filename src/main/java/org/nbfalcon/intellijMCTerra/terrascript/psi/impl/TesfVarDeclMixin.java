@@ -24,6 +24,15 @@ public class TesfVarDeclMixin extends ASTWrapperPsiElement implements PsiNamedEl
     }
 
     @Override
+    public int getTextOffset() {
+        final PsiElement id = getNameIdentifier();
+        if (id != null) {
+            return id.getTextOffset();
+        }
+        return super.getTextOffset();
+    }
+
+    @Override
     public @Nullable PsiElement getNameIdentifier() {
         return findChildByType(TerrascriptElementTypes.ID);
     }

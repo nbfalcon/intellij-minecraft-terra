@@ -67,11 +67,11 @@ id_decl ::= ID_KW STRING SEMI {pin=1}
 
 inner stmt ::= kw_stmt | expr_stmt | block_stmt | var_decl_stmt | if_kw_stmt | while_kw_stmt | for_kw_stmt
 kw_stmt ::= FAIL SEMI {pin=1}
-expr_stmt ::= expr SEMI
+expr_stmt ::= expr SEMI {pin=1}
 block_stmt ::= LBRACE stmt* RBRACE {
     pin=1
-    implements=['org.nbfalcon.intellijMCTerra.terrascript.psi.TerrascriptDeclarationScope']
-    mixin='org.nbfalcon.intellijMCTerra.terrascript.psi.impl.TerrascriptDeclarationScopeMixin'
+    implements=['org.nbfalcon.intellijMCTerra.terrascript.psi.TesfDeclarationScope']
+    mixin='org.nbfalcon.intellijMCTerra.terrascript.psi.impl.TesfDeclarationScopeMixin'
 }
 
 var_decl_stmt ::= type ID (ASSIGN expr)? SEMI {

@@ -3,12 +3,12 @@ package org.nbfalcon.intellijMCTerra.terrascript.psi.impl;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
-import org.nbfalcon.intellijMCTerra.terrascript.psi.TerrascriptDeclarationScope;
+import org.nbfalcon.intellijMCTerra.terrascript.psi.TesfDeclarationScope;
 
-public class TerrascriptDeclarationScopeMixin extends ASTWrapperPsiElement implements TerrascriptDeclarationScope {
+public class TesfDeclarationScopeMixin extends ASTWrapperPsiElement implements TesfDeclarationScope {
     private TerrascriptSymbolTable lazySymbolTable;
 
-    public TerrascriptDeclarationScopeMixin(@NotNull ASTNode node) {
+    public TesfDeclarationScopeMixin(@NotNull ASTNode node) {
         super(node);
     }
 

@@ -30,6 +30,26 @@
                                implementationClass="org.nbfalcon.intellijMCTerra.terrascript.lang.TerrascriptParserDefinition"/>
         <projectService serviceImplementation="org.nbfalcon.intellijMCTerra.terrascript.psi.TesfElementFactory"/>
 
+        <!-- intellisense: inspections -->
+        <localInspection language="Minecraft.Terrascript"
+                         displayName="Duplicate variable"
+                         groupName="Terrascript"
+                         enabledByDefault="true"
+                         level="ERROR"
+                         implementationClass="org.nbfalcon.intellijMCTerra.terrascript.intellisense.inspections.TesfDuplicateVariableInspection"/>
+        <localInspection language="Minecraft.Terrascript"
+                         displayName="Unknown variable"
+                         groupName="Terrascript"
+                         enabledByDefault="true"
+                         level="ERROR"
+                         implementationClass="org.nbfalcon.intellijMCTerra.terrascript.intellisense.inspections.TesfUnknownVariableInspection"/>
+        <localInspection language="Minecraft.Terrascript"
+                         displayName="Unused variable"
+                         groupName="Terrascript"
+                         enabledByDefault="true"
+                         level="WARNING"
+                         implementationClass="org.nbfalcon.intellijMCTerra.terrascript.intellisense.inspections.TesfUnusedVariableInspection"/>
+
         <!-- xref -->
         <lang.findUsagesProvider language="Minecraft.Terrascript"
                                  implementationClass="org.nbfalcon.intellijMCTerra.terrascript.intellisense.xref.TerrascriptFindUsagesProvider"/>

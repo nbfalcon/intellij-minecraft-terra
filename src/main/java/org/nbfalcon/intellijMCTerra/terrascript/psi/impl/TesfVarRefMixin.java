@@ -9,7 +9,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.nbfalcon.intellijMCTerra.terrascript.psi.TerrascriptDeclarationScope;
+import org.nbfalcon.intellijMCTerra.terrascript.psi.TesfDeclarationScope;
 import org.nbfalcon.intellijMCTerra.terrascript.psi.TesfElementFactory;
 import org.nbfalcon.intellijMCTerra.terrascript.psi.TesfVarDeclStmt;
 
@@ -22,9 +22,9 @@ public class TesfVarRefMixin extends ASTWrapperPsiElement implements PsiPolyVari
 
     @Override
     public ResolveResult @NotNull [] multiResolve(boolean incompleteCode) {
-        final TerrascriptDeclarationScope scope = getScope();
+        final TesfDeclarationScope scope = getScope();
         if (scope == null) return ResolveResult.EMPTY_ARRAY;
-        return TerrascriptDeclarationScope.resolveAll(scope, getName(), this);
+        return TesfDeclarationScope.resolveAll(scope, getName(), this);
     }
 
     @Override
@@ -39,20 +39,20 @@ public class TesfVarRefMixin extends ASTWrapperPsiElement implements PsiPolyVari
 
     @Override
     public @Nullable PsiElement resolve() {
-        final TerrascriptDeclarationScope scope = getScope();
+        final TesfDeclarationScope scope = getScope();
         if (scope == null) return null;
-        return TerrascriptDeclarationScope.resolveCanonical(scope, getName());
+        return TesfDeclarationScope.resolveCanonical(scope, getName());
     }
 
     @Override
     public Object @NotNull [] getVariants() {
-        final TerrascriptDeclarationScope scope = getScope();
-        return TerrascriptDeclarationScope.getCompletions(scope);
+        final TesfDeclarationScope scope = getScope();
+        return TesfDeclarationScope.getCompletions(scope);
     }
 
     @Nullable
-    private TerrascriptDeclarationScope getScope() {
-        return PsiTreeUtil.getParentOfType(this, TerrascriptDeclarationScope.class);
+    private TesfDeclarationScope getScope() {
+        return PsiTreeUtil.getParentOfType(this, TesfDeclarationScope.class);
     }
 
     @Override
