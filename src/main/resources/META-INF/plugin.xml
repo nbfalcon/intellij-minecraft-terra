@@ -49,6 +49,12 @@
                          enabledByDefault="true"
                          level="WARNING"
                          implementationClass="org.nbfalcon.intellijMCTerra.terrascript.intellisense.inspections.TesfUnusedVariableInspection"/>
+        <localInspection language="Minecraft.Terrascript"
+                         displayName="Invalid type"
+                         groupName="Terrascript"
+                         level="ERROR"
+                         enabledByDefault="true"
+                         implementationClass="org.nbfalcon.intellijMCTerra.terrascript.intellisense.inspections.TesfTypeCheckerInspection"/>
 
         <!-- xref -->
         <lang.findUsagesProvider language="Minecraft.Terrascript"

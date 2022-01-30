@@ -38,7 +38,9 @@ BLOCK_COMMENT=\/\*([^*]*|\*+[^/])*\**\/
   {NUMBER}           { return NUMBER; }
   {STRING}           { return STRING; }
 
-  "id"               {return ID_KW;}
+  "false"            { return BOOL_LIT; }
+  "true"             { return BOOL_LIT; }
+  "id"               { return ID_KW; }
   "fail"             { return FAIL; }
   "if"               { return IF; }
   "else"             { return ELSE; }

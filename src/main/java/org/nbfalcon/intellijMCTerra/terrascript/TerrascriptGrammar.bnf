@@ -20,6 +20,7 @@
         LINE_COMMENT='regexp://.*$'
         BLOCK_COMMENT='regexp:/\*([^*]*|\*+[^/])*\**/'
 
+        BOOL_LIT='regexp:false|true'
         NUM_TY='num'
         BOOL_TY='bool'
         STR_TY='str'
@@ -47,7 +48,7 @@
         GTEQ='>='
         EQ='=='
         NEQ='!='
-        NEGATE='!'
+        NEG='!'
         AND='&&'
         OR='||'
         COMMA=','
@@ -98,12 +99,12 @@ expr ::= funcall_expr
     | add_binexpr | mul_binexpr
     | greather_than_binexpr
     | equals_binexpr
-    | and_binexpr | or_binexpr
     | assignment_binexpr
+    | and_binexpr | or_binexpr
     | primary_group
 funcall_expr ::= func_ref_callee LPAR call_arglist RPAR {pin=2}
 call_arglist ::= (expr (COMMA expr)*)?
-literal_expr ::= NUMBER | STRING
+literal_expr ::= NUMBER | STRING | BOOL_LIT
 paren_expr ::= LPAR expr RPAR
 var_ref_expr ::= ID {
     implements=['com.intellij.psi.PsiPolyVariantReference']
@@ -117,12 +118,12 @@ greather_than_binexpr ::= expr (LT | GT | LTEQ | GTEQ) expr
 equals_binexpr ::= expr (EQ | NEQ) expr
 and_binexpr ::= expr AND expr
 or_binexpr ::= expr OR expr
-neg_expr ::= (MINUS | NEG) expr {pin=1}
 assignment_binexpr ::= var_ref_expr ASSIGN expr {rightAssociative=true}
+neg_expr ::= (MINUS | NEG) expr {pin=1}
 
 private primary_group ::= var_ref_expr | literal_expr | paren_expr
 
-fake binexpr_op ::= '+' | '-' | '*' | '/' | '%' | '==' | '!=' | '<' | '>' | '<=' | '>=' | '='
+fake binexpr_op ::= '+' | '-' | '*' | '/' | '%' | '==' | '!=' | '<' | '>' | '<=' | '>=' | '=' | '&&' | '||'
 fake binexpr ::= expr binexpr_op expr {
     extends=expr
     methods=[
