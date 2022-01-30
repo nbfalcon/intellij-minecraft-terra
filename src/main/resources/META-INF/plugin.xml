@@ -1,0 +1,48 @@
+<idea-plugin>
+    <id>org.example.intellij-minecraft-terra</id>
+    <name>Minecraft Terra World Generator Support</name>
+    <vendor email="nibkblos@outlook.com" url="https://github.com/nbfalcon">Nikita Bloshchanevich</vendor>
+
+    <description><![CDATA[
+    Support for the Minecraft Terra world generator in IntelliJ.
+
+    - Intellisense for Terrascript (.tesf) files:
+      - Syntax highlighting
+      - Auto-completion
+      - Error checking
+    - YAML integration
+    ]]></description>
+
+    <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+        <fileType extensions="tesf"
+                  name="Terrascript File"
+                  language="Minecraft.Terrascript"
+                  implementationClass="org.nbfalcon.intellijMCTerra.terrascript.lang.TerrascriptFileType"
+                  fieldName="INSTANCE"/>
+        <!-- intellisense -->
+        <lang.parserDefinition language="Minecraft.Terrascript"
+                               implementationClass="org.nbfalcon.intellijMCTerra.terrascript.lang.TerrascriptParserDefinition"/>
+
+        <!-- xref -->
+        <psi.referenceContributor language="Minecraft.Terrascript"
+                                  implementation="org.nbfalcon.intellijMCTerra.terrascript.psi.TerrascriptReferenceContributor"/>
+        <lang.findUsagesProvider language="Minecraft.Terrascript"
+                                 implementationClass="org.nbfalcon.intellijMCTerra.terrascript.intellisense.xref.TerrascriptFindUsagesProvider"/>
+
+        <!-- highlighting -->
+        <lang.syntaxHighlighterFactory
+                language="Minecraft.Terrascript"
+                implementationClass="org.nbfalcon.intellijMCTerra.terrascript.intellisense.syntaxHighlighting.TerrascriptHighlighterFactory"/>
+        <annotator language="Minecraft.Terrascript"
+                   implementationClass="org.nbfalcon.intellijMCTerra.terrascript.intellisense.syntaxHighlighting.TerrascriptAnnotator"/>
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+    </actions>
+</idea-plugin>

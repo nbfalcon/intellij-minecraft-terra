@@ -1,0 +1,132 @@
+{
+    parserClass='org.nbfalcon.intellijMCTerra.terrascript.parser.TerrascriptParser'
+    elementTypeHolderClass='org.nbfalcon.intellijMCTerra.terrascript.parser.TerrascriptElementTypes'
+
+    elementTypeClass='org.nbfalcon.intellijMCTerra.terrascript.psi.TerrascriptElementType'
+    tokenTypeClass='org.nbfalcon.intellijMCTerra.terrascript.psi.TerrascriptTokenType'
+
+    psiClassPrefix='Tesf'
+    psiPackage='org.nbfalcon.intellijMCTerra.terrascript.psi'
+    psiImplPackage='org.nbfalcon.intellijMCTerra.terrascript.psi.impl'
+
+    generateTokenAccessors=true
+}
+{
+    tokens=[
+        STRING='regexp:"([^"]|\\")*"'
+        NUMBER='regexp:[0-9]*'
+
+        WHITESPACE='regexp:\s+'
+        LINE_COMMENT='regexp://.*$'
+        BLOCK_COMMENT='regexp:/\*([^*]*|\*+[^/])*\**/'
+
+        NUM_TY='num'
+        BOOL_TY='bool'
+        STR_TY='str'
+        WHILE='while'
+        FOR='for'
+        IF='if'
+        ELSE='else'
+        ID_KW='id'
+        FUNCTION='function'
+        ID='regexp:[a-zA-Z][a-zA-Z_0-9]*'
+
+        LPAR='('
+        RPAR=')'
+        LBRACE='{'
+        RBRACE='}'
+        PLUS='+'
+        MINUS='-'
+        STAR='*'
+        SLASH='/'
+        MODULO='%'
+        ASSIGN='='
+        LT='<'
+        GT='>'
+        LTEQ='<='
+        GTEQ='>='
+        EQ='=='
+        NEQ='!='
+        NEGATE='!'
+        AND='&&'
+        OR='||'
+        COMMA=','
+        SEMI=';'
+    ]
+}
+{
+    extends(".*_stmt")=stmt
+    pin(".*_kw_stmt")=1
+    extends(".*binexpr")=binexpr
+    pin(".*binexpr")=2
+    extends(".*expr")=expr
+}
+
+script ::= id_decl? stmt*
+id_decl ::= ID_KW STRING SEMI {pin=1}
+
+inner stmt ::= kw_stmt | expr_stmt | block_stmt | var_decl_stmt | if_kw_stmt | while_kw_stmt | for_kw_stmt
+kw_stmt ::= FAIL SEMI {pin=1}
+expr_stmt ::= expr SEMI
+block_stmt ::= LBRACE stmt* RBRACE {
+    pin=1
+    implements=['org.nbfalcon.intellijMCTerra.terrascript.psi.TerrascriptDeclarationScope']
+    mixin='org.nbfalcon.intellijMCTerra.terrascript.psi.impl.TerrascriptDeclarationScopeMixin'
+}
+
+var_decl_stmt ::= type ID (ASSIGN expr)? SEMI {
+    pin=1
+    implements=[
+        'com.intellij.psi.PsiNamedElement'
+        'com.intellij.psi.PsiNameIdentifierOwner']
+    mixin='org.nbfalcon.intellijMCTerra.terrascript.psi.impl.TesfVarDeclMixin'
+}
+if_kw_stmt ::= IF LPAR expr RPAR stmt if_else? {
+    methods=[
+        if_then='/stmt[0]'
+        if_else='/stmt[1]']
+}
+
+private inner if_else ::= ELSE stmt {pin=1}
+for_kw_stmt ::= FOR LPAR stmt expr? SEMI expr RPAR stmt
+while_kw_stmt ::= WHILE LPAR expr RPAR stmt
+
+type ::= NUM_TY | BOOL_TY | STR_TY
+
+expr ::= funcall_expr
+    | neg_expr
+    | add_binexpr | mul_binexpr
+    | greather_than_binexpr
+    | equals_binexpr
+    | and_binexpr | or_binexpr
+    | assignment_binexpr
+    | primary_group
+funcall_expr ::= func_ref_callee LPAR call_arglist RPAR {pin=2}
+call_arglist ::= (expr (COMMA expr)*)?
+literal_expr ::= NUMBER | STRING
+paren_expr ::= LPAR expr RPAR
+var_ref_expr ::= ID {
+    implements=['com.intellij.psi.PsiPolyVariantReference']
+    mixin='org.nbfalcon.intellijMCTerra.terrascript.psi.impl.TesfVarRefMixin'
+}
+func_ref_callee ::= ID
+
+add_binexpr ::= expr (ADD | MINUS) expr
+mul_binexpr ::= expr (MUL | DIV | MODULO) expr
+greather_than_binexpr ::= expr (LT | GT | LTEQ | GTEQ) expr
+equals_binexpr ::= expr (EQ | NEQ) expr
+and_binexpr ::= expr AND expr
+or_binexpr ::= expr OR expr
+neg_expr ::= (MINUS | NEG) expr {pin=1}
+assignment_binexpr ::= var_ref_expr ASSIGN expr {rightAssociative=true}
+
+private primary_group ::= var_ref_expr | literal_expr | paren_expr
+
+fake binexpr_op ::= '+' | '-' | '*' | '/' | '%' | '==' | '!=' | '<' | '>' | '<=' | '>=' | '='
+fake binexpr ::= expr binexpr_op expr {
+    extends=expr
+    methods=[
+        left='/expr[0]'
+        right='/expr[1]'
+    ]
+}
