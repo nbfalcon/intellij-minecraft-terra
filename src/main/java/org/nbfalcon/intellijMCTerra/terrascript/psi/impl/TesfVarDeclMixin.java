@@ -10,6 +10,7 @@ import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.nbfalcon.intellijMCTerra.terrascript.parser.TerrascriptElementTypes;
+import org.nbfalcon.intellijMCTerra.terrascript.psi.TesfElementFactory;
 
 public class TesfVarDeclMixin extends ASTWrapperPsiElement implements PsiNamedElement, PsiNameIdentifierOwner {
     public TesfVarDeclMixin(@NotNull ASTNode node) {
@@ -29,6 +30,10 @@ public class TesfVarDeclMixin extends ASTWrapperPsiElement implements PsiNamedEl
 
     @Override
     public PsiElement setName(@NlsSafe @NotNull String name) throws IncorrectOperationException {
-        return null; // FIXME
+        final PsiElement id = getNameIdentifier();
+        if (id != null) {
+            id.replace(TesfElementFactory.getInstance(getProject()).createLeaf(name));
+        }
+        return this;
     }
 }

@@ -1,15 +1,15 @@
 package org.nbfalcon.intellijMCTerra.terrascript.psi;
 
+import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementResolveResult;
-import com.intellij.psi.PsiNameIdentifierOwner;
 import com.intellij.psi.ResolveResult;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.nbfalcon.intellijMCTerra.terrascript.psi.impl.TerrascriptSymbolTable;
 
-import java.util.Collection;
+import java.util.*;
 
 public interface TerrascriptDeclarationScope extends PsiElement {
     static @Nullable PsiElement resolveCanonical(TerrascriptDeclarationScope scope, String identifier) {
@@ -40,6 +40,16 @@ public interface TerrascriptDeclarationScope extends PsiElement {
             scope = scope.getParentScope();
         }
         return ResolveResult.EMPTY_ARRAY;
+    }
+
+    static LookupElement[] getCompletions(TerrascriptDeclarationScope scope) {
+        List<LookupElement> completions = new ArrayList<>();
+        Set<String> shadowed = new HashSet<>();
+        while (scope != null) {
+            scope.getSymbolTable().addCompletions(completions, shadowed);
+            scope = scope.getParentScope();
+        }
+        return completions.toArray(LookupElement.EMPTY_ARRAY);
     }
 
     @NotNull TerrascriptSymbolTable getSymbolTable();

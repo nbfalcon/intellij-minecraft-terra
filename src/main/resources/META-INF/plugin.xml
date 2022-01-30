@@ -24,13 +24,13 @@
                   language="Minecraft.Terrascript"
                   implementationClass="org.nbfalcon.intellijMCTerra.terrascript.lang.TerrascriptFileType"
                   fieldName="INSTANCE"/>
-        <!-- intellisense -->
+
+        <!-- psi -->
         <lang.parserDefinition language="Minecraft.Terrascript"
                                implementationClass="org.nbfalcon.intellijMCTerra.terrascript.lang.TerrascriptParserDefinition"/>
+        <projectService serviceImplementation="org.nbfalcon.intellijMCTerra.terrascript.psi.TesfElementFactory"/>
 
         <!-- xref -->
-        <psi.referenceContributor language="Minecraft.Terrascript"
-                                  implementation="org.nbfalcon.intellijMCTerra.terrascript.psi.TerrascriptReferenceContributor"/>
         <lang.findUsagesProvider language="Minecraft.Terrascript"
                                  implementationClass="org.nbfalcon.intellijMCTerra.terrascript.intellisense.xref.TerrascriptFindUsagesProvider"/>
 
@@ -40,6 +40,10 @@
                 implementationClass="org.nbfalcon.intellijMCTerra.terrascript.intellisense.syntaxHighlighting.TerrascriptHighlighterFactory"/>
         <annotator language="Minecraft.Terrascript"
                    implementationClass="org.nbfalcon.intellijMCTerra.terrascript.intellisense.syntaxHighlighting.TerrascriptAnnotator"/>
+
+        <!-- refactor -->
+        <lang.refactoringSupport language="Minecraft.Terrascript"
+                                 implementationClass="org.nbfalcon.intellijMCTerra.terrascript.intellisense.refactor.TesfRefactorProvider"/>
     </extensions>
 
     <actions>

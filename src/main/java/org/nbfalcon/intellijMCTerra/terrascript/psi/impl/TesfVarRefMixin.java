@@ -4,15 +4,13 @@ import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.NlsSafe;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiPolyVariantReference;
-import com.intellij.psi.PsiReference;
-import com.intellij.psi.ResolveResult;
+import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.nbfalcon.intellijMCTerra.terrascript.psi.TerrascriptDeclarationScope;
+import org.nbfalcon.intellijMCTerra.terrascript.psi.TesfElementFactory;
 import org.nbfalcon.intellijMCTerra.terrascript.psi.TesfVarDeclStmt;
 
 import java.util.Objects;
@@ -24,7 +22,7 @@ public class TesfVarRefMixin extends ASTWrapperPsiElement implements PsiPolyVari
 
     @Override
     public ResolveResult @NotNull [] multiResolve(boolean incompleteCode) {
-        final TerrascriptDeclarationScope scope = PsiTreeUtil.getParentOfType(this, TerrascriptDeclarationScope.class);
+        final TerrascriptDeclarationScope scope = getScope();
         if (scope == null) return ResolveResult.EMPTY_ARRAY;
         return TerrascriptDeclarationScope.resolveAll(scope, getName(), this);
     }
@@ -41,15 +39,20 @@ public class TesfVarRefMixin extends ASTWrapperPsiElement implements PsiPolyVari
 
     @Override
     public @Nullable PsiElement resolve() {
-        final TerrascriptDeclarationScope scope = PsiTreeUtil.getParentOfType(this, TerrascriptDeclarationScope.class);
+        final TerrascriptDeclarationScope scope = getScope();
         if (scope == null) return null;
         return TerrascriptDeclarationScope.resolveCanonical(scope, getName());
     }
 
     @Override
     public Object @NotNull [] getVariants() {
-        // FIXME
-        return PsiPolyVariantReference.super.getVariants();
+        final TerrascriptDeclarationScope scope = getScope();
+        return TerrascriptDeclarationScope.getCompletions(scope);
+    }
+
+    @Nullable
+    private TerrascriptDeclarationScope getScope() {
+        return PsiTreeUtil.getParentOfType(this, TerrascriptDeclarationScope.class);
     }
 
     @Override
@@ -64,12 +67,13 @@ public class TesfVarRefMixin extends ASTWrapperPsiElement implements PsiPolyVari
 
     @Override
     public PsiElement handleElementRename(@NotNull String newElementName) throws IncorrectOperationException {
-        return null; // FIXME
+        return replace(TesfElementFactory.getInstance(getProject()).createVarref(newElementName));
     }
 
     @Override
     public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException {
-        return null;
+        final String name = ((PsiNamedElement) element).getName();
+        return name == null ? null : handleElementRename(name);
     }
 
     @Override
