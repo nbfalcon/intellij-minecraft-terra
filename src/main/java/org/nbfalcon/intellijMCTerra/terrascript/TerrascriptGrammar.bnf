@@ -26,10 +26,12 @@
         STR_TY='str'
         WHILE='while'
         FOR='for'
+        BREAK='break'
+        CONTINUE='continue'
         IF='if'
         ELSE='else'
         ID_KW='id'
-        FUNCTION='function'
+        RETURN='return'
         ID='regexp:[a-zA-Z][a-zA-Z_0-9]*'
 
         LPAR='('
@@ -67,7 +69,12 @@ script ::= id_decl? stmt*
 id_decl ::= ID_KW STRING SEMI {pin=1}
 
 inner stmt ::= kw_stmt | expr_stmt | block_stmt | var_decl_stmt | if_kw_stmt | while_kw_stmt | for_kw_stmt
-kw_stmt ::= FAIL SEMI {pin=1}
+
+kw_stmt ::= fail_kw_stmt | break_kw_stmt | return_kw_stmt
+fail_kw_stmt ::= FAIL SEMI
+break_kw_stmt ::= (BREAK | CONTINUE) SEMI
+return_kw_stmt ::= RETURN expr? SEMI
+
 expr_stmt ::= expr SEMI {pin=1}
 block_stmt ::= LBRACE stmt* RBRACE {
     pin=1

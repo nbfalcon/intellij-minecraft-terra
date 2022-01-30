@@ -46,6 +46,7 @@ public class TerrascriptParserDefinition implements ParserDefinition, LightEditC
             TerrascriptElementTypes.ID_KW, TerrascriptElementTypes.FAIL,
             TerrascriptElementTypes.IF, TerrascriptElementTypes.ELSE,
             TerrascriptElementTypes.WHILE, TerrascriptElementTypes.FOR,
+            TerrascriptElementTypes.BREAK, TerrascriptElementTypes.CONTINUE, TerrascriptElementTypes.RETURN,
             TerrascriptElementTypes.BOOL_LIT);
     public static TokenSet TYPES = TokenSet.create(
             TerrascriptElementTypes.NUM_TY, TerrascriptElementTypes.STR_TY, TerrascriptElementTypes.BOOL_TY);

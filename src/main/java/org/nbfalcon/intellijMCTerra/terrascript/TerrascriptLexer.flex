@@ -46,6 +46,9 @@ BLOCK_COMMENT=\/\*([^*]*|\*+[^/])*\**\/
   "else"             { return ELSE; }
   "for"              { return FOR; }
   "while"            { return WHILE; }
+  "break"            { return BREAK; }
+  "continue"         { return CONTINUE; }
+  "return"           { return RETURN; }
   "num"              { return NUM_TY; }
   "bool"             { return BOOL_TY; }
   "str"              { return STR_TY; }
