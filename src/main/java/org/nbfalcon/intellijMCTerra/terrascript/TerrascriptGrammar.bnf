@@ -68,12 +68,13 @@
 script ::= id_decl? stmt*
 id_decl ::= ID_KW STRING SEMI {pin=1}
 
-inner stmt ::= kw_stmt | expr_stmt | block_stmt | var_decl_stmt | if_kw_stmt | while_kw_stmt | for_kw_stmt
+inner stmt ::= kw_stmt | expr_stmt | block_stmt | var_decl_stmt | if_kw_stmt | while_kw_stmt | for_kw_stmt | empty_stmt
 
 kw_stmt ::= fail_kw_stmt | break_kw_stmt | return_kw_stmt
 fail_kw_stmt ::= FAIL SEMI
 break_kw_stmt ::= (BREAK | CONTINUE) SEMI
 return_kw_stmt ::= RETURN expr? SEMI
+empty_stmt ::= SEMI
 
 expr_stmt ::= expr SEMI {pin=1}
 block_stmt ::= LBRACE stmt* RBRACE {
@@ -96,20 +97,20 @@ if_kw_stmt ::= IF LPAR expr RPAR stmt if_else? {
 }
 
 private inner if_else ::= ELSE stmt {pin=1}
-for_kw_stmt ::= FOR LPAR stmt expr? SEMI expr RPAR stmt
+for_kw_stmt ::= FOR LPAR stmt expr? SEMI expr RPAR stmt {
+    mixin='org.nbfalcon.intellijMCTerra.terrascript.psi.impl.TesfForDeclarationScopeMixin'
+}
 while_kw_stmt ::= WHILE LPAR expr RPAR stmt
 
 type ::= NUM_TY | BOOL_TY | STR_TY
 
-expr ::= funcall_expr
-    | neg_expr
+expr ::= assignment_binexpr | or_binexpr | and_binexpr
+    | equals_binexpr | greather_than_binexpr
     | add_binexpr | mul_binexpr
-    | greather_than_binexpr
-    | equals_binexpr
-    | assignment_binexpr
-    | and_binexpr | or_binexpr
+    | funcall_expr
+    | neg_expr
     | primary_group
-funcall_expr ::= func_ref_callee LPAR call_arglist RPAR {pin=2}
+funcall_expr ::= func_ref_callee LPAR call_arglist RPAR
 call_arglist ::= (expr (COMMA expr)*)?
 literal_expr ::= NUMBER | STRING | BOOL_LIT
 paren_expr ::= LPAR expr RPAR

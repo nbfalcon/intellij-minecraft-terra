@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.nbfalcon.intellijMCTerra.terrascript.psi.TesfDeclarationScope;
 
 public class TesfDeclarationScopeMixin extends ASTWrapperPsiElement implements TesfDeclarationScope {
-    private TerrascriptSymbolTable lazySymbolTable;
+    protected TerrascriptSymbolTable lazySymbolTable;
 
     public TesfDeclarationScopeMixin(@NotNull ASTNode node) {
         super(node);

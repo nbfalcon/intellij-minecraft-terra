@@ -4,6 +4,7 @@ import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemsHolder;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.SyntaxTraverser;
 import org.jetbrains.annotations.NotNull;
@@ -16,8 +17,11 @@ public class TesfUnknownVariableInspection extends LocalInspectionTool {
         ProblemsHolder holder = new ProblemsHolder(manager, file, isOnTheFly);
         for (TesfVarRefExpr ref :
                 SyntaxTraverser.psiTraverser(file).bfsTraversal().filter(TesfVarRefExpr.class)) {
-            if (ref.resolve() == null) {
+            final PsiElement resolve = ref.resolve();
+            if (resolve == null) {
                 holder.registerProblem(ref, "Cannot resolve variable '" + ref.getCanonicalText() + "'" );
+            } else if (resolve.getTextOffset() > ref.getTextOffset()) {
+                holder.registerProblem(ref, "Variable defined later");
             }
         }
         return holder.getResultsArray();

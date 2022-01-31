@@ -3,7 +3,6 @@ package org.nbfalcon.intellijMCTerra.terrascript.psi.util;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.PsiWhiteSpace;
-import io.netty.util.internal.SuppressJava6Requirement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.nbfalcon.intellijMCTerra.terrascript.intellisense.completion.functions.FunctionDescription;
@@ -36,7 +35,8 @@ public class TesfPsiUtil {
         }
         if (expr instanceof TesfAddBinexpr || expr instanceof TesfMulBinexpr) {
             return TesfType.NUM;
-        } else if (expr instanceof TesfOrBinexpr || expr instanceof TesfAndBinexpr) {
+        } else if (expr instanceof TesfOrBinexpr || expr instanceof TesfAndBinexpr
+                || expr instanceof TesfEqualsBinexpr || expr instanceof TesfGreatherThanBinexpr) {
             return TesfType.BOOL;
         } else if (expr instanceof TesfAssignmentBinexpr) {
             return inferType(((TesfAssignmentBinexpr) expr).getRight());
@@ -71,7 +71,8 @@ public class TesfPsiUtil {
                                    TypeErrorConsumer onTypeError) {
         if (expr != null && expected != null) {
             final TesfType actual = inferType(expr);
-            if (expected != actual) {
+            // If we can't infer the type, there shouldn't be an error (we can't do anything)
+            if (actual != null && expected != actual) {
                 onTypeError.onTypeError(expr, expected, actual);
             }
         }
@@ -108,27 +109,29 @@ public class TesfPsiUtil {
             final FunctionDescription desc = TesfBuiltinFunctions.getInstance().getDescription(name);
             if (desc != null) {
                 final TesfCallArglist args = ((TesfFuncallExpr) expr).getCallArglist();
-                if (args != null) {
-                    final List<TesfExpr> argExprs = args.getExprList();
-                    int i = 0;
-                    for (TesfExpr arg : argExprs) {
-                        if (i < desc.args.length) {
-                            expectType(arg, desc.args[i].type, onTypeError);
-                        } else {
-                            if (desc.varArg != null) {
-                                expectType(arg, desc.varArg.type, onTypeError);
-                            }
-                            else {
-                                onTypeError.onUnexpectedArgument(expr);
-                            }
+                final List<TesfExpr> argExprs = args.getExprList();
+                int i = 0;
+                for (TesfExpr arg : argExprs) {
+                    if (i < desc.args.length) {
+                        expectType(arg, desc.args[i].type, onTypeError);
+                    } else {
+                        if (desc.varArg != null) {
+                            expectType(arg, desc.varArg.type, onTypeError);
                         }
-                        i++;
+                        else {
+                            onTypeError.onUnexpectedArgument(expr);
+                        }
                     }
-                    if (argExprs.size() < desc.args.length) {
-                        List<String> missing = new ArrayList<>();
-                        for (int iMissing = argExprs.size(); iMissing < desc.args.length; iMissing++) {
+                    i++;
+                }
+                if (argExprs.size() < desc.args.length) {
+                    List<String> missing = new ArrayList<>();
+                    for (int iMissing = argExprs.size(); iMissing < desc.args.length; iMissing++) {
+                        if (!desc.args[iMissing].isOptional) {
                             missing.add(desc.args[iMissing].name);
                         }
+                    }
+                    if (!missing.isEmpty()) {
                         onTypeError.onMissingArguments((TesfFuncallExpr) expr, missing);
                     }
                 }
@@ -154,8 +157,8 @@ public class TesfPsiUtil {
     public static @Nullable TesfExpr getForMiddleExpr(TesfForKwStmt forStmt) {
         final PsiElement semi = forStmt.getSemi();
         if (semi != null) {
-            PsiElement sibling = semi.getNextSibling();
-            if (sibling instanceof PsiWhiteSpace) sibling = sibling.getNextSibling();
+            PsiElement sibling = semi.getPrevSibling();
+            if (sibling instanceof PsiWhiteSpace) sibling = sibling.getPrevSibling();
             if (sibling instanceof TesfExpr) {
                 return (TesfExpr) sibling;
             }

@@ -22,12 +22,16 @@ public class TerrascriptSymbolTable {
     public static TerrascriptSymbolTable fromBlock(PsiElement block) {
         TerrascriptSymbolTable table = new TerrascriptSymbolTable();
         for (TesfVarDeclStmt decl : PsiTreeUtil.getChildrenOfTypeAsList(block, TesfVarDeclStmt.class)) {
-            final String name = decl.getName();
-            if (name != null) {
-                table.symbols.put(name, decl);
-            }
+            table.registerVarDecl(decl);
         }
         return table;
+    }
+
+    public void registerVarDecl(TesfVarDeclStmt decl) {
+        final String name = decl.getName();
+        if (name != null) {
+            this.symbols.put(name, decl);
+        }
     }
 
     public @Nullable Collection<PsiElement> resolveAll(String identifier) {

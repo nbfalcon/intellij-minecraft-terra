@@ -24,10 +24,10 @@ import static org.nbfalcon.intellijMCTerra.terrascript.parser.TerrascriptElement
 
 STRING=\"([^\"]|\\.)*\"
 ID=[a-zA-Z][a-zA-Z_0-9]*
-NUMBER=[0-9]*
+NUMBER=[0-9]*\.?[0-9]*
 
 WHITE_SPACE=\s+
-LINE_COMMENT=\/\/[^\R]*
+LINE_COMMENT=\/\/[^\n\r]*\r?\n?
 BLOCK_COMMENT=\/\*([^*]*|\*+[^/])*\**\/
 
 %%

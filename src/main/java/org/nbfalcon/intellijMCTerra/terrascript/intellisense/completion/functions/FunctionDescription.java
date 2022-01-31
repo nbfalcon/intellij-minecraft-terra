@@ -1,7 +1,6 @@
 package org.nbfalcon.intellijMCTerra.terrascript.intellisense.completion.functions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.jetbrains.annotations.Nullable;
 import org.nbfalcon.intellijMCTerra.terrascript.psi.util.TesfPsiUtil;
 
 import java.io.IOException;
@@ -12,12 +11,16 @@ public class FunctionDescription {
     public String name;
     public TesfPsiUtil.TesfType returnType;
 
-    public Parameter[] args;
+    public NormalParameter[] args;
     public Parameter varArg;
 
     public static class Parameter {
         public String name;
         public TesfPsiUtil.TesfType type;
+    }
+
+    public static class NormalParameter extends Parameter {
+        public boolean isOptional;
     }
 
     public static class DescFile {

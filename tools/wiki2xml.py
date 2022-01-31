@@ -135,12 +135,26 @@ def ty_to_enum(ty: str):
     return ty.upper()
 
 
+def collect_doc(doc):
+    return "".join(map(text_of, doc))
+
+
+def arg_is_optional(doc):
+    return "optional" in collect_doc(doc)
+
+
 def main_print_json(funcs_wiki: str):
     soup = BeautifulSoup(funcs_wiki, 'html.parser')
     root = []
     for name, (args, var_args), (ret, ret_doc), doc in extract_functions(soup):
-        args = [{"name": arg_name, "type": ty_to_enum(arg_ty)} for arg_name, arg_ty, arg_doc in args]
-        func = {"name": name, "returnType": ty_to_enum(ret), "args": args}
+        my_args = []
+        for arg_name, arg_ty, arg_doc in args:
+            this_arg = {"name": arg_name, "type": ty_to_enum(arg_ty)}
+            if arg_is_optional(arg_doc):
+                this_arg["isOptional"] = True
+            my_args.append(this_arg)
+
+        func = {"name": name, "returnType": ty_to_enum(ret), "args": my_args}
         if var_args:
             arg_name, arg_ty, arg_doc = var_args
             func["varArg"] = {"name": arg_name, "type": ty_to_enum(arg_ty)}
