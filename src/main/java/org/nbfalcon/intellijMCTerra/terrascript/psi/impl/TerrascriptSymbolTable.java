@@ -7,7 +7,6 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.icons.AllIcons;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.nbfalcon.intellijMCTerra.terrascript.psi.TesfVarDeclStmt;
 import org.nbfalcon.intellijMCTerra.terrascript.psi.util.TesfPsiUtil;
@@ -46,7 +45,7 @@ public class TerrascriptSymbolTable {
             String key = entry.getKey();
             if (shadowed.add(key)) {
                 LookupElementBuilder item = LookupElementBuilder.create(key);
-                final TesfPsiUtil.VarType type = TesfPsiUtil.getType((TesfVarDeclStmt) entry.getValue());
+                final TesfPsiUtil.TesfType type = TesfPsiUtil.getType((TesfVarDeclStmt) entry.getValue());
                 if (type != null) {
                     switch (type) {
                         case BOOL:

@@ -117,7 +117,9 @@ var_ref_expr ::= ID {
     implements=['com.intellij.psi.PsiPolyVariantReference']
     mixin='org.nbfalcon.intellijMCTerra.terrascript.psi.impl.TesfVarRefMixin'
 }
-func_ref_callee ::= ID
+func_ref_callee ::= ID {
+    mixin='org.nbfalcon.intellijMCTerra.terrascript.psi.impl.TesfFuncCalleeMixin'
+}
 
 add_binexpr ::= expr (ADD | MINUS) expr
 mul_binexpr ::= expr (MUL | DIV | MODULO) expr

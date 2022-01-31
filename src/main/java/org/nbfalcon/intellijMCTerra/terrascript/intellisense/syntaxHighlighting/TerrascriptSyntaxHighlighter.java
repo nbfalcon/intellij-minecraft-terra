@@ -35,8 +35,10 @@ public class TerrascriptSyntaxHighlighter implements SyntaxHighlighter {
     public static final TextAttributesKey SYMBOL = createTextAttributesKey(
             "SYMBOL", DefaultLanguageHighlighterColors.LOCAL_VARIABLE);
 
-    public static final TextAttributesKey FUNCTION = createTextAttributesKey(
-            "FUNCTION", DefaultLanguageHighlighterColors.FUNCTION_CALL);
+    public static final TextAttributesKey UNKNOWN_FUNCTION = createTextAttributesKey(
+            "UNKNOWN_FUNCTION", DefaultLanguageHighlighterColors.FUNCTION_CALL);
+    public static final TextAttributesKey BUILTIN_FUNCTION = createTextAttributesKey(
+            "BUILTIN_FUNCTION", DefaultLanguageHighlighterColors.STATIC_METHOD);
     public static final TextAttributesKey VARIABLE_DECL = createTextAttributesKey(
             "VARIABLE_DECL", DefaultLanguageHighlighterColors.GLOBAL_VARIABLE);
     public static final TextAttributesKey VAR_REF = createTextAttributesKey(

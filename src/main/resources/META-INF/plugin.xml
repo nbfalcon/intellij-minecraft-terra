@@ -70,6 +70,9 @@
         <!-- refactor -->
         <lang.refactoringSupport language="Minecraft.Terrascript"
                                  implementationClass="org.nbfalcon.intellijMCTerra.terrascript.intellisense.refactor.TesfRefactorProvider"/>
+
+        <!-- intellisense: completion -->
+        <applicationService serviceImplementation="org.nbfalcon.intellijMCTerra.terrascript.intellisense.completion.functions.TesfBuiltinFunctions"/>
     </extensions>
 
     <actions>
